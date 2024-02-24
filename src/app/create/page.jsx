@@ -1,9 +1,28 @@
 import { addPost, deletePost } from "@/lib/action"
 import styles from "./create.module.css";
 
-const Create = () => {
+const getUsers = async () => {
+    const res = await fetch("http://localhost:3000/api/user");
+    if (!res.ok) {
+        throw new Error("Something went wrong");
+    }
+    return res.json();
+};
+
+const Create = async () => {
+    const users = await getUsers();
+    
     return (
         <div className={styles.wrapper}>
+            <div>
+                <h2 className={styles.head}>Existing Users</h2>
+                {users.map(user => (
+                    <div key={user._id}>
+                        <span>{user.username}</span>{" - "}
+                        <span>{user._id}</span>
+                    </div>
+                ))}
+            </div>
             <div className={styles.formWrapper}>
                 <h2 className={styles.head}>Create Post</h2>
                 <form action={addPost} className={styles.form}>
